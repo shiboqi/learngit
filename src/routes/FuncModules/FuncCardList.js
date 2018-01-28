@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Button, Icon, List, Modal, Form, Input, Radio, Upload } from 'antd';
+import { Card, Button, Icon, List, Modal, Form, Input, Upload } from 'antd';
+import { message } from 'antd/lib/index';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Ellipsis from '../../components/Ellipsis';
 import styles from './FuncCardList.less';
-import { message } from 'antd/lib/index';
 
 const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
 
 @connect(state => ({
   list: state.list,
@@ -18,18 +17,18 @@ export default class CardList extends PureComponent {
     addInputValue: '',
   }
 
-  handleModalVisible = (flag) => {
-    this.setState({
-      modalVisible: !!flag,
-    });
-  }
-
   componentDidMount() {
     this.props.dispatch({
       type: 'list/fetch',
       payload: {
         count: 8,
       },
+    });
+  }
+
+  handleModalVisible = (flag) => {
+    this.setState({
+      modalVisible: !!flag,
     });
   }
 
@@ -58,14 +57,14 @@ export default class CardList extends PureComponent {
       type: 'list/delete',
       payload: {
         moduleid: id,
-      }
-    })
+      },
+    });
     this.props.dispatch({
       type: 'list/fetch',
       payload: {
         count: 8,
       },
-    })
+    });
     message.success('删除成功');
   }
 
@@ -111,20 +110,19 @@ export default class CardList extends PureComponent {
                   />
                 </Card>
               </List.Item>
-            ) : (
-                <List.Item>
-                  <Button
-                    type="dashed"
-                    className={styles.newButton}
-                    onClick={() => this.handleModalVisible(true)}
-                  >
-                    <Icon type="plus" /> 新增模块
+            )
+              :
+              (<List.Item>
+                <Button
+                  type="dashed"
+                  className={styles.newButton}
+                  onClick={() => this.handleModalVisible(true)}
+                >
+                  <Icon type="plus" /> 新增模块
                   </Button>
-                </List.Item>
-              )
+              </List.Item>)
             )}
           />
-          {/* -------------------------- */}
           <Modal
             title="新增模块"
             visible={modalVisible}
@@ -162,13 +160,6 @@ export default class CardList extends PureComponent {
                 </Button>
               </Upload>
             </FormItem>
-            {/* <FormItem
-              labelCol={{ span: 5 }}
-              wrapperCol={{ span: 15 }}
-              label="模块地址"
-            >
-              <Input placeholder="请输入模块地址" />
-            </FormItem> */}
           </Modal>
         </div>
       </PageHeaderLayout>

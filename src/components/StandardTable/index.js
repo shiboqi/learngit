@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import { Table, Alert, Badge, Divider } from 'antd';
+import { Table, Alert, Badge, Divider, Button } from 'antd';
 import styles from './index.less';
 
 const statusMap = ['default', 'processing', 'success', 'error'];
+
 class StandardTable extends PureComponent {
   state = {
     selectedRowKeys: [],
-  };
+  }
 
   componentWillReceiveProps(nextProps) {
     // clean state
@@ -83,9 +84,9 @@ class StandardTable extends PureComponent {
         title: '操作',
         render: () => (
           <div>
-            <a href="">配置</a>
+            <Button type="primary">冻结</Button>
             <Divider type="vertical" />
-            <a href="">订阅警报</a>
+            <Button type="primary">重置密码</Button>
           </div>
         ),
       },

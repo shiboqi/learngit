@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import moment from 'moment'
+import React, { PureComponent } from 'react';
+import moment from 'moment';
 import {
   Table,
   Alert,
@@ -12,74 +12,74 @@ import {
   Select,
   Upload,
   Button,
-  Icon
-} from 'antd'
-import { routerRedux } from 'dva/router'
+  Icon,
+} from 'antd';
+import { routerRedux } from 'dva/router';
 
-import styles from './ActivityTable.less'
+import styles from './ActivityTable.less';
 
-const { TextArea } = Input
-const statusMap = ['processing', 'success', 'error']
-const FormItem = Form.Item
-const RadioGroup = Radio.Group
+const { TextArea } = Input;
+const statusMap = ['processing', 'success', 'error'];
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
 
 @Form.create()
 class ActivityTable extends PureComponent {
   state = {
     selectedRowKeys: [],
     settingRocord: {},
-    visible: false
+    visible: false,
   }
 
   componentWillReceiveProps(nextProps) {
     // clean state
     if (nextProps.selectedRows.length === 0) {
       this.setState({
-        selectedRowKeys: []
-      })
+        selectedRowKeys: [],
+      });
     }
   }
 
   handleRowSelectChange = (selectedRowKeys, selectedRows) => {
     if (this.props.onSelectRow) {
-      this.props.onSelectRow(selectedRows)
+      this.props.onSelectRow(selectedRows);
     }
 
-    this.setState({ selectedRowKeys })
+    this.setState({ selectedRowKeys });
   }
 
   handleTableChange = (pagination, filters, sorter) => {
-    this.props.onChange(pagination, filters, sorter)
+    this.props.onChange(pagination, filters, sorter);
   }
 
   cleanSelectedKeys = () => {
-    this.handleRowSelectChange([], [])
+    this.handleRowSelectChange([], []);
   }
 
   handleTimeSort = key => (a, b) => {
-    return new Date(a[key]).getTime() - new Date(b[key]).getTime()
+    return new Date(a[key]).getTime() - new Date(b[key]).getTime();
   }
 
   handleOk = () => {
-    this.setState({ visible: true })
+    this.setState({ visible: true });
   }
   handleCancle = () => {
-    this.setState({ visible: false })
+    this.setState({ visible: false });
   }
 
-  handleSettingClick = record => {
-    this.props.dispatch({ type: 'activities/configActivity', payload: record })
+  handleSettingClick = (record) => {
+    this.props.dispatch({ type: 'activities/configActivity', payload: record });
   }
 
   render() {
-    const { selectedRowKeys } = this.state
-    const { data, pagination, loading } = this.props
+    const { selectedRowKeys } = this.state;
+    const { data, pagination, loading } = this.props;
 
-    const status = ['未开启', '开启', '异常']
+    const status = ['未开启', '开启', '异常'];
     const columns = [
       {
         title: '活动名',
-        dataIndex: 'activityName'
+        dataIndex: 'activityName',
       },
       {
         title: '状态',
@@ -87,33 +87,33 @@ class ActivityTable extends PureComponent {
         filters: [
           {
             text: status[0],
-            value: 0
+            value: 0,
           },
           {
             text: status[1],
-            value: 1
-          }
+            value: 1,
+          },
         ],
         render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />
+          return <Badge status={statusMap[val]} text={status[val]} />;
         },
-        onFilter: (value, record) => parseInt(value) === record.status
+        onFilter: (value, record) => parseInt(value) === record.status,
       },
       {
         title: '模板编号',
-        dataIndex: 'templateId'
+        dataIndex: 'templateId',
       },
       {
         title: '创建时间',
         dataIndex: 'addTime',
         sorter: this.handleTimeSort('addTime'),
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '更新时间',
         dataIndex: 'updateTime',
         sorter: this.handleTimeSort('updateTime'),
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '操作',
@@ -128,24 +128,24 @@ class ActivityTable extends PureComponent {
             <Divider type="vertical" />
             <a href="">开启</a>
           </div>
-        )
-      }
-    ]
+        ),
+      },
+    ];
 
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
-      ...pagination
-    }
+      ...pagination,
+    };
 
     const rowSelection = {
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
       getCheckboxProps: record => ({
-        disabled: record.disabled
-      })
-    }
-    const { getFieldDecorator } = this.props.form
+        disabled: record.disabled,
+      }),
+    };
+    const { getFieldDecorator } = this.props.form;
 
     return (
       <div className={styles.standardTable}>
@@ -175,8 +175,8 @@ class ActivityTable extends PureComponent {
           onChange={this.handleTableChange}
         />
       </div>
-    )
+    );
   }
 }
 
-export default ActivityTable
+export default ActivityTable;

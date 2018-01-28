@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { connect } from 'dva'
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import {
   Row,
   Col,
@@ -13,20 +13,20 @@ import {
   Menu,
   InputNumber,
   DatePicker,
-  Radio
-} from 'antd'
-import ActivityTable from './ActivityTable'
-import PageHeaderLayout from '../../layouts/PageHeaderLayout'
+  Radio,
+} from 'antd';
+import ActivityTable from './ActivityTable';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-import styles from './ActivityList.less'
-import { routerRedux } from 'dva/router'
+import styles from './ActivityList.less';
+import { routerRedux } from 'dva/router';
 
-const RadioGroup = Radio.Group
-const FormItem = Form.Item
-const { Option } = Select
+const RadioGroup = Radio.Group;
+const FormItem = Form.Item;
+const { Option } = Select;
 
 @connect(state => ({
-  activities: state.activities
+  activities: state.activities,
 }))
 @Form.create()
 export default class TableList extends PureComponent {
@@ -34,148 +34,151 @@ export default class TableList extends PureComponent {
     selectedRows: [],
     loading: true,
     data: [],
-    value: 0
+    value: 0,
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { dispatch } = this.props;
     dispatch({
-      type: 'activities/fetchList'
-    })
+      type: 'activities/fetchList',
+    });
   }
 
-  onChange = e => {
-    console.log('radio checked', e.target.value)
+  onChange = (e) => {
+    console.log('radio checked', e.target.value);
     this.setState({
-      value: e.target.value
-    })
+      value: e.target.value,
+    });
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props
-    const { formValues } = this.state
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj }
-      newObj[key] = getValue(filtersArg[key])
-      return newObj
-    }, {})
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
 
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
-      ...filters
-    }
+      ...filters,
+    };
     if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`
+      params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
     dispatch({
       type: 'rule/fetch',
-      payload: params
-    })
+      payload: params,
+    });
   }
 
   handleFormReset = () => {
-    const { form, dispatch } = this.props
-    form.resetFields()
+    const { form, dispatch } = this.props;
+    form.resetFields();
     dispatch({
       type: 'rule/fetch',
-      payload: {}
-    })
+      payload: {},
+    });
   }
 
   toggleForm = () => {
     this.setState({
-      expandForm: !this.state.expandForm
-    })
+      expandForm: !this.state.expandForm,
+    });
   }
 
-  handleMenuClick = e => {
-    const { dispatch } = this.props
-    const { selectedRows } = this.state
+  handleMenuClick = (e) => {
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
 
-    if (!selectedRows) return
-
+    if (!selectedRows) return;
+    console.log('selectedRows:', selectedRows);
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'rule/remove',
+          type: 'activities/delete',
           payload: {
-            no: selectedRows.map(row => row.no).join(',')
+            id: selectedRows.map(row => row.id),
           },
           callback: () => {
             this.setState({
-              selectedRows: []
-            })
-          }
-        })
-        break
+              selectedRows: [],
+            });
+            dispatch({
+              type: 'activities/fetchList',
+            });
+          },
+        });
+        break;
       default:
-        break
+        break;
     }
   }
 
-  handleSelectRows = rows => {
+  handleSelectRows = (rows) => {
     this.setState({
-      selectedRows: rows
-    })
+      selectedRows: rows,
+    });
   }
 
-  handleSearch = e => {
-    e.preventDefault()
+  handleSearch = (e) => {
+    e.preventDefault();
 
-    const { dispatch, form } = this.props
+    const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      if (err) return
+      if (err) return;
 
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf()
-      }
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
 
       this.setState({
-        formValues: values
-      })
+        formValues: values,
+      });
 
       dispatch({
         type: 'rule/fetch',
-        payload: values
-      })
-    })
+        payload: values,
+      });
+    });
   }
 
-  handleModalVisible = flag => {
-    this.props.dispatch(routerRedux.push('/activities/create'))
+  handleModalVisible = (flag) => {
+    this.props.dispatch(routerRedux.push('/activities/create'));
     this.setState({
-      modalVisible: !!flag
-    })
+      modalVisible: !!flag,
+    });
   }
 
-  handleAddInput = e => {
+  handleAddInput = (e) => {
     this.setState({
-      addInputValue: e.target.value
-    })
+      addInputValue: e.target.value,
+    });
   }
 
   handleAdd = () => {
     this.props.dispatch({
       type: 'rule/add',
       payload: {
-        description: this.state.addInputValue
-      }
-    })
+        description: this.state.addInputValue,
+      },
+    });
 
-    message.success('添加成功')
+    message.success('添加成功');
     this.setState({
-      modalVisible: false
-    })
+      modalVisible: false,
+    });
   }
 
   renderSimpleForm() {
-    const { getFieldDecorator } = this.props.form
+    const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -209,11 +212,11 @@ export default class TableList extends PureComponent {
           </Col>
         </Row>
       </Form>
-    )
+    );
   }
 
   renderAdvancedForm() {
-    const { getFieldDecorator } = this.props.form
+    const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -286,26 +289,25 @@ export default class TableList extends PureComponent {
           </span>
         </div>
       </Form>
-    )
+    );
   }
 
   renderForm() {
     return this.state.expandForm
       ? this.renderAdvancedForm()
-      : this.renderSimpleForm()
+      : this.renderSimpleForm();
   }
 
   render() {
-    const { activities, dispatch } = this.props
-    const { loading, activityVOList } = activities
-    const { selectedRows } = this.state
+    const { activities, dispatch } = this.props;
+    const { loading, activityVOList } = activities;
+    const { selectedRows } = this.state;
 
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
       </Menu>
-    )
+    );
 
     return (
       <PageHeaderLayout title="活动列表">
@@ -343,6 +345,6 @@ export default class TableList extends PureComponent {
           </div>
         </Card>
       </PageHeaderLayout>
-    )
+    );
   }
 }

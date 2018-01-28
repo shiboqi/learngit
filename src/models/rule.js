@@ -1,4 +1,4 @@
-import { queryRule, removeRule, addRule } from '../services/api';
+import { queryRule, addRule, deleteActivity } from '../services/api';
 
 export default {
   namespace: 'rule',
@@ -49,7 +49,9 @@ export default {
         type: 'changeLoading',
         payload: true,
       });
-      const response = yield call(removeRule, payload);
+      console.log('remove');
+      const response = yield call(deleteActivity, payload);
+      console.log(response);
       yield put({
         type: 'save',
         payload: response,

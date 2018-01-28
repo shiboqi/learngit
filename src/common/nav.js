@@ -1,12 +1,12 @@
-import dynamic from 'dva/dynamic'
+import dynamic from 'dva/dynamic';
 
 // wrapper of dynamic
 const dynamicWrapper = (app, models, component) =>
   dynamic({
     app,
     models: () => models.map(m => import(`../models/${m}.js`)),
-    component
-  })
+    component,
+  });
 
 // nav data
 export const getNavData = app => [
@@ -50,23 +50,23 @@ export const getNavData = app => [
             path: 'create',
             component: dynamicWrapper(app, ['form'], () =>
               import('../routes/Activities/createActivity')
-            )
+            ),
           },
           {
             name: '活动列表',
             path: 'list',
             component: dynamicWrapper(app, ['activities'], () =>
               import('../routes/Activities/ActivityList')
-            )
+            ),
           },
           {
             name: '活动设置',
             path: 'setting',
             component: dynamicWrapper(app, ['activities'], () =>
               import('../routes/Activities/Manage')
-            )
-          }
-        ]
+            ),
+          },
+        ],
       },
       {
         name: '用户管理',
@@ -78,9 +78,9 @@ export const getNavData = app => [
             path: 'create',
             component: dynamicWrapper(app, ['account'], () =>
               import('../routes/Accounts/AccountList')
-            )
-          }
-        ]
+            ),
+          },
+        ],
       },
       {
         name: '模块管理',
@@ -92,9 +92,9 @@ export const getNavData = app => [
             path: 'list',
             component: dynamicWrapper(app, ['list'], () =>
               import('../routes/FuncModules/FuncCardList')
-            )
-          }
-        ]
+            ),
+          },
+        ],
       },
       // {
       //   name: '表单页',
@@ -209,23 +209,23 @@ export const getNavData = app => [
             path: '403',
             component: dynamicWrapper(app, [], () =>
               import('../routes/Exception/403')
-            )
+            ),
           },
           {
             name: '404',
             path: '404',
             component: dynamicWrapper(app, [], () =>
               import('../routes/Exception/404')
-            )
+            ),
           },
           {
             name: '500',
             path: '500',
             component: dynamicWrapper(app, [], () =>
               import('../routes/Exception/500')
-            )
-          }
-        ]
+            ),
+          },
+        ],
       },
       {
         name: '机器',
@@ -237,11 +237,11 @@ export const getNavData = app => [
             path: 'list',
             component: dynamicWrapper(app, ['list'], () =>
               import('../routes/Machines/MachineList')
-            )
-          }
-        ]
-      }
-    ]
+            ),
+          },
+        ],
+      },
+    ],
   },
 
   {
@@ -259,24 +259,24 @@ export const getNavData = app => [
             path: 'login',
             component: dynamicWrapper(app, ['login'], () =>
               import('../routes/User/Login')
-            )
+            ),
           },
           {
             name: '设置',
             path: 'setting', //              对应module里的文件
             component: dynamicWrapper(app, ['setting'], () =>
               import('../routes/User/Setting')
-            )
+            ),
           },
           {
             name: '设置结果',
             path: 'settingResult',
             component: dynamicWrapper(app, [], () =>
               import('../routes/User/SettingResult')
-            )
-          }
-        ]
-      }
-    ]
-  }
-]
+            ),
+          },
+        ],
+      },
+    ],
+  },
+];

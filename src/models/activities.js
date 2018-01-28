@@ -2,9 +2,9 @@ import {
   queryActivities,
   queryTemplate,
   queryModule,
-  queryAllManager
-} from '../services/api'
-import { routerRedux } from 'dva/router'
+  queryAllManager, deleteActivity,
+} from '../services/api';
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'activities',
@@ -22,99 +22,112 @@ export default {
       shareText: '',
       status: -1,
       templateId: -1,
-      updateTime: -1
-    }
+      updateTime: -1,
+    },
   },
 
   effects: {
-    *fetchList(_, { call, put }) {
+    * fetchList(_, { call, put }) {
       yield put({
         type: 'changeLoading',
-        payload: true
-      })
+        payload: true,
+      });
 
-      const response = yield call(queryActivities)
-      const { activityVOList } = response.data
+      const response = yield call(queryActivities);
+      const { activityVOList } = response.data;
 
       yield put({
         type: 'saveList',
-        payload: activityVOList
-      })
+        payload: activityVOList,
+      });
 
       yield put({
         type: 'changeLoading',
-        payload: false
-      })
+        payload: false,
+      });
     },
-    *configActivity({ payload }, { call, put }) {
-      yield put({ type: 'initSetting', payload })
+    * configActivity({ payload }, { call, put }) {
+      yield put({ type: 'initSetting', payload });
       yield put({
         type: 'changeLoading',
-        payload: true
-      })
-      const response = yield call(queryTemplate)
-      yield put({ type: 'saveTemplate', payload: response.data.templates })
+        payload: true,
+      });
+      const response = yield call(queryTemplate);
+      yield put({ type: 'saveTemplate', payload: response.data.templates });
 
-      const moduleResponse = yield call(queryModule)
-      console.log(moduleResponse.data.systemModuleList)
+      const moduleResponse = yield call(queryModule);
+      console.log(moduleResponse.data.systemModuleList);
       yield put({
         type: 'saveSystemModule',
-        payload: moduleResponse.data.systemModuleList
-      })
+        payload: moduleResponse.data.systemModuleList,
+      });
 
-      const managerResponse = yield call(queryAllManager)
-      console.log('====================================')
-      console.log(managerResponse.data.managerList)
-      console.log('====================================')
+      const managerResponse = yield call(queryAllManager);
+      console.log('====================================');
+      console.log(managerResponse.data.managerList);
+      console.log('====================================');
       yield put({
         type: 'saveManager',
-        payload: managerResponse.data.managerList
-      })
+        payload: managerResponse.data.managerList,
+      });
 
-      yield put(routerRedux.push('/activities/setting'))
+      yield put(routerRedux.push('/activities/setting'));
       yield put({
         type: 'changeLoading',
-        payload: false
-      })
-    }
+        payload: false,
+      });
+    },
+    * delete({ payload, callback }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(deleteActivity, payload);
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+      const deleteStatus = response.data.code;
+      if (callback && deleteStatus === 0) callback();
+    },
   },
 
   reducers: {
     saveList(state, action) {
       return {
         ...state,
-        activityVOList: action.payload
-      }
+        activityVOList: action.payload,
+      };
     },
     changeLoading(state, action) {
       return {
         ...state,
-        loading: action.payload
-      }
+        loading: action.payload,
+      };
     },
     initSetting(state, action) {
       return {
         ...state,
-        selectedActivity: action.payload
-      }
+        selectedActivity: action.payload,
+      };
     },
     saveTemplate(state, action) {
       return {
         ...state,
-        templateList: action.payload
-      }
+        templateList: action.payload,
+      };
     },
     saveSystemModule(state, action) {
       return {
         ...state,
-        systemModuleList: action.payload
-      }
+        systemModuleList: action.payload,
+      };
     },
     saveManager(state, action) {
       return {
         ...state,
-        managerList: action.payload
-      }
-    }
-  }
-}
+        managerList: action.payload,
+      };
+    },
+  },
+};

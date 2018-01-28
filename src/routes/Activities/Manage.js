@@ -1,5 +1,5 @@
-import React, { PureComponent, Component } from 'react'
-import { connect } from 'dva'
+import React, { PureComponent, Component } from 'react';
+import { connect } from 'dva';
 import {
   Form,
   Input,
@@ -11,50 +11,50 @@ import {
   Radio,
   Icon,
   Tooltip,
-  Upload
-} from 'antd'
-import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-import styles from './style.less'
+  Upload,
+} from 'antd';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './style.less';
 
-const FormItem = Form.Item
-const { Option } = Select
-const { RangePicker } = DatePicker
-const { TextArea } = Input
-const RadioGroup = Radio.Group
+const FormItem = Form.Item;
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
+const RadioGroup = Radio.Group;
 
 @connect(state => ({
-  activities: state.activities
+  activities: state.activities,
 }))
 @Form.create()
 export default class BasicForms extends Component {
-  handleSubmit = e => {
-    e.preventDefault()
+  handleSubmit = (e) => {
+    e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.props.dispatch({
           type: 'form/submitRegularForm',
-          payload: values
-        })
+          payload: values,
+        });
       }
-    })
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
+    console.log(nextProps);
   }
 
-  handleSelectChange = value => {
-    console.log(value)
+  handleSelectChange = (value) => {
+    console.log(value);
   }
   render() {
-    const { submitting } = this.props
-    const { getFieldDecorator, getFieldValue } = this.props.form
+    const { submitting } = this.props;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
     const {
       managerList,
       templateList,
       selectedActivity,
-      systemModuleList
-    } = this.props.activities
+      systemModuleList,
+    } = this.props.activities;
     const {
       activityName,
       belongManager,
@@ -64,38 +64,38 @@ export default class BasicForms extends Component {
       status,
       templateId,
       moduleList,
-      userAccount
-    } = selectedActivity
+      userAccount,
+    } = selectedActivity;
 
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 7 }
+        sm: { span: 7 },
       },
       wrapperCol: {
         xs: { span: 24 },
         sm: { span: 12 },
-        md: { span: 10 }
-      }
-    }
+        md: { span: 10 },
+      },
+    };
 
     const submitFormLayout = {
       wrapperCol: {
         xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 }
-      }
-    }
+        sm: { span: 10, offset: 7 },
+      },
+    };
 
     const moduleOptions = systemModuleList.map(module => (
       <Option key={module.id.toString()}>{module.moduleName}</Option>
-    ))
+    ));
     const defaultModuleValue = moduleList.map(module => ({
       key: module.id.toString(),
-      label: module.moduleName
-    }))
+      label: module.moduleName,
+    }));
     const managerOptions = managerList.map(manager => (
       <Option key={manager.id.toString()}>{manager.userAccount}</Option>
-    ))
+    ));
 
     return (
       <PageHeaderLayout title="活动设置" content="设置活动表单">
@@ -110,10 +110,10 @@ export default class BasicForms extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入活动名称'
-                  }
+                    message: '请输入活动名称',
+                  },
                 ],
-                initialValue: activityName
+                initialValue: activityName,
               })(<Input placeholder="给活动起个名字" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="属于的管理员">
@@ -122,11 +122,11 @@ export default class BasicForms extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请填写管理员'
-                  }
-                ]
+                    message: '请填写管理员',
+                  },
+                ],
               })(
-                <Select labelInValue={true} placeholder="输入管理员名称">
+                <Select labelInValue placeholder="输入管理员名称">
                   {managerOptions}
                 </Select>
               )}
@@ -148,12 +148,12 @@ export default class BasicForms extends Component {
                     type: 'array',
                     required: true,
                     len: 4,
-                    message: '请选择四个模块'
-                  }
-                ]
+                    message: '请选择四个模块',
+                  },
+                ],
               })(
                 <Select
-                  labelInValue={true}
+                  labelInValue
                   mode="multiple"
                   placeholder="请选择所需模块，先选在前后选在后"
                 >
@@ -176,9 +176,9 @@ export default class BasicForms extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入朋友圈分享标题'
-                  }
-                ]
+                    message: '请输入朋友圈分享标题',
+                  },
+                ],
               })(
                 <TextArea
                   style={{ minHeight: 16 }}
@@ -196,6 +196,6 @@ export default class BasicForms extends Component {
           </Form>
         </Card>
       </PageHeaderLayout>
-    )
+    );
   }
 }

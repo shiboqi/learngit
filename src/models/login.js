@@ -1,5 +1,5 @@
-import { routerRedux } from 'dva/router'
-import { fakeAccountLogin, fakeMobileLogin } from '../services/api'
+import { routerRedux } from 'dva/router';
+import { fakeAccountLogin, fakeMobileLogin } from '../services/api';
 
 export default {
   /* combine到rootReducer的key值 */
@@ -12,8 +12,8 @@ export default {
       frozen: 0,
       id: -1,
       managerType: 0,
-      userAccount: ''
-    }
+      userAccount: '',
+    },
   },
   /* 对应saga */
   effects: {
@@ -21,30 +21,30 @@ export default {
       // 对应action的名字
       yield put({
         type: 'changeSubmitting',
-        payload: true
-      })
-      const response = yield call(fakeAccountLogin, payload)
+        payload: true,
+      });
+      const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
-        payload: response
-      })
+        payload: response,
+      });
       yield put({
         type: 'changeSubmitting',
-        payload: false
-      })
+        payload: false,
+      });
     },
     *logout(_, { put }) {
       yield put({
         type: 'changeLoginStatus',
         payload: {
-          status: false
-        }
-      })
-      yield put(routerRedux.push('/user/login'))
+          status: false,
+        },
+      });
+      yield put(routerRedux.push('/user/login'));
     },
     *setting(_, { put }) {
-      yield put(routerRedux.push('/user/setting'))
-    }
+      yield put(routerRedux.push('/user/setting'));
+    },
   },
 
   reducers: {
@@ -53,14 +53,14 @@ export default {
         ...state,
         status: payload.data.code,
         type: payload.data.systemManager.managerType,
-        info: { ...payload.data.systemManager }
-      }
+        info: { ...payload.data.systemManager },
+      };
     },
     changeSubmitting(state, { payload }) {
       return {
         ...state,
-        submitting: payload
-      }
-    }
-  }
-}
+        submitting: payload,
+      };
+    },
+  },
+};
