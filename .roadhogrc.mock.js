@@ -13,7 +13,7 @@ import { getProfileBasicData } from './mock/profile'
 import { getProfileAdvancedData } from './mock/profile'
 import { getNotices } from './mock/notices'
 import { format, delay } from 'roadhog-api-doc'
-
+import { moduleDelete, moduleInsert } from './mock/module'
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true'
 
@@ -115,7 +115,7 @@ const proxy = {
       msg: '请求成功'
     })
   },
-  'GET /bacc/systemManager/frozenManager': (req, res) => {},
+  'GET /bacc/systemManager/frozenManager': (req, res) => { },
   'GET /back/notices': getNotices,
   'POST /back/systemManager/queryAllManager': {
     code: 0,
@@ -284,7 +284,9 @@ const proxy = {
       ]
     },
     msg: '请求成功'
-  }
+  },
+  'DELETE /back/systemModule/delete': moduleDelete,
+  'POST /back/systemModule/insert': moduleInsert,
 }
 
 export default (noProxy ? {} : delay(proxy, 1000))

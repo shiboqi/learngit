@@ -46,11 +46,27 @@ export default class CardList extends PureComponent {
         description: this.state.addInputValue,
       },
     });
-
     message.success('添加成功');
     this.setState({
       modalVisible: false,
     });
+  }
+
+
+  handleDelete = (id) => {
+    this.props.dispatch({
+      type: 'list/delete',
+      payload: {
+        moduleid: id,
+      }
+    })
+    this.props.dispatch({
+      type: 'list/fetch',
+      payload: {
+        count: 8,
+      },
+    })
+    message.success('删除成功');
   }
 
   render() {
@@ -60,20 +76,8 @@ export default class CardList extends PureComponent {
     const content = (
       <div className={styles.pageHeaderContent}>
         <p>
-          段落示意：蚂蚁金服务设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，
-          提供跨越设计与开发的体验解决方案。
+          在此处可以查看、删除、增加模块
         </p>
-        <div className={styles.contentLink}>
-          <a>
-            <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg" /> 快速开始
-          </a>
-          <a>
-            <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/NbuDUAuBlIApFuDvWiND.svg" /> 产品简介
-          </a>
-          <a>
-            <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg" /> 产品文档
-          </a>
-        </div>
       </div>
     );
 
@@ -98,17 +102,16 @@ export default class CardList extends PureComponent {
             dataSource={['', ...list]}
             renderItem={item => (item ? (
               <List.Item key={item.id}>
-                <Card hoverable className={styles.card} actions={[<a>编辑</a>, <a>删除</a>]}>
+                <Card hoverable className={styles.card} title={<a href="#">{item.title}</a>} extra={[<Button onClick={() => this.handleDelete(item.id)} > 删除</Button>]}>
                   <Card.Meta
                     avatar={<img alt="" className={styles.cardAvatar} src={item.avatar} />}
-                    title={<a href="#">{item.title}</a>}
                     description={(
-                      <Ellipsis className={styles.item} lines={3}>{item.description}</Ellipsis>
-                      )}
+                      <Ellipsis className={styles.item} lines={4}>{item.description}</Ellipsis>
+                    )}
                   />
                 </Card>
               </List.Item>
-              ) : (
+            ) : (
                 <List.Item>
                   <Button
                     type="dashed"
@@ -121,6 +124,7 @@ export default class CardList extends PureComponent {
               )
             )}
           />
+          {/* -------------------------- */}
           <Modal
             title="新增模块"
             visible={modalVisible}
@@ -150,19 +154,21 @@ export default class CardList extends PureComponent {
               wrapperCol={{ span: 15 }}
               label="模块图标"
             >
-              <Upload>
+              <Upload
+                beforeUpload={{}}
+              >
                 <Button >
                   <Icon type="upload" />点击选择图片作为模块图标
                 </Button>
               </Upload>
             </FormItem>
-            <FormItem
+            {/* <FormItem
               labelCol={{ span: 5 }}
               wrapperCol={{ span: 15 }}
               label="模块地址"
             >
               <Input placeholder="请输入模块地址" />
-            </FormItem>
+            </FormItem> */}
           </Modal>
         </div>
       </PageHeaderLayout>

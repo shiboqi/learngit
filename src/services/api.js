@@ -1,11 +1,11 @@
-import request from '../utils/request';
 import { stringify } from 'qs';
+import request from '../utils/request';
 
-/*---------------活动管理-----------------------*/
+/* ---------------活动管理----------------------- */
 export async function queryActivities(body) {
   return request('/back/systemActivity/queryActivity', {
     method: 'POST',
-    body: body,
+    body,
   });
 }
 
@@ -29,45 +29,42 @@ export async function updateModuleOrder() {
 }
 
 export async function updateShareImage() {
-  return request('/back/systemActivity/updateShareImage')
+  return request('/back/systemActivity/updateShareImage');
 }
-
 
 export async function queryModule() {
   return request('/back/systemModule/queryModule');
 }
 
-
-
-//-----------------------账户管理------------------------
+// -----------------------账户管理------------------------
 
 export async function addNewManager(body) {
   return request('/back/systemManager/addNewManager', {
     method: 'POST',
-    body
-  })
+    body,
+  });
 }
+
 export async function frozenManager(body) {
   return request('/back/systemManager/frozenManager', {
     method: 'POST',
-    body
-  })
+    body,
+  });
 }
 
 export async function queryAllManager(body) {
   return request('/back/systemManager/queryAllManager', {
     method: 'POST',
-    body
+    body,
   });
 }
 
 export async function thawManager(body) {
   return request('/back/systemManager/thawManager', {
     method: 'POST',
-    body
+    body,
   });
 }
-
 
 export async function resetPasword(params) {
   return request('/back/systemManager/resetPasword', {
@@ -97,78 +94,74 @@ export async function logout(params) {
   });
 }
 
-
-//------------------------设备管理----------------------
+// ------------------------设备管理----------------------
 export async function addSystemDevice(param) {
   return request('/back/systemDevice/add', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
 export async function deleteSystemDevice(param) {
   return request('/back/systemDevice/delete', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
 export async function querySystemDevice(param) {
   return request('/back/systemDevice/list', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
-export async function allocateActivityToDevice() {
+export async function allocateActivityToDevice(param) {
   return request('/back/systemDevice/allocateActivityToDevice', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
-export async function allocateDeviceToManager() {
+export async function allocateDeviceToManager(param) {
   return request('/back/systemDevice/allocateDeviceToManager', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
-
-//-------------------------专业展示--------------------------
+// -------------------------专业展示--------------------------
 export async function addProfessionalShow(param) {
   return request('/back/professionalExhibition/addNewProfessionalExhibition', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
 export async function deleteProfessionalShow(param) {
   return request('/back/professionalExhibition/delete', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
 export async function modifyProfessionalShow(param) {
   return request('/back/professionalExhibition/modify', {
     method: 'POST',
-    body: param
-  })
+    body: param,
+  });
 }
 
-//-------------------------模板---------------------
-
+// -------------------------模板---------------------
 
 export async function queryTemplate() {
   return request('/back/systemTemplate/query');
 }
 
-
 export async function addTemplate(param) {
   return request('/back/systemTemplate/add', {
-    method: "POST",
-    body: param
+    method: 'POST',
+    body: param,
   });
 }
 
@@ -254,9 +247,17 @@ export async function queryNotices() {
   return request('/back/notices');
 }
 
+// ------------------模块管理-------------------
 
 export async function deleteModule(params) {
-  return request('/das//dasd', {
+  return request('/back/systemModule/delete', {
+    method: 'DELETE',
+    body: params,
+  });
+}
+
+export async function insertModule(params) {
+  return request('/back/systemModule/insert', {
     method: 'POST',
     body: params,
   });
