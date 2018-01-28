@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'dva';
+import React, { PureComponent } from 'react'
+import { connect } from 'dva'
 import {
   Row,
   Col,
@@ -16,16 +16,19 @@ import {
   Modal,
   message,
   Radio,
-} from 'antd';
-import StandardTable from '../../components/StandardTable/index';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+} from 'antd'
+import StandardTable from '../../components/StandardTable/index'
+import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
-import styles from './AccountList.less';
+import styles from './AccountList.less'
 
-const RadioGroup = Radio.Group;
-const FormItem = Form.Item;
-const { Option } = Select;
-const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
+const RadioGroup = Radio.Group
+const FormItem = Form.Item
+const { Option } = Select
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',')
 
 @connect(state => ({
   account: state.account,
@@ -39,68 +42,72 @@ export default class TableList extends PureComponent {
     selectedRows: [],
     formValues: {},
     value: 0,
+    userName: '',
+    passowrd: '',
+    managerType: 0,
+    remarks: '',
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     dispatch({
       type: 'account/fetch',
-    });
+    })
   }
 
-  onChange= (e) => {
-    console.log('radio checked', e.target.value);
+  onRadioChange = e => {
+    console.log('radio checked', e.target.value)
     this.setState({
-      value: e.target.value,
-    });
+      managerType: e.target.value,
+    })
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
+    const { dispatch } = this.props
+    const { formValues } = this.state
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
+      const newObj = { ...obj }
+      newObj[key] = getValue(filtersArg[key])
+      return newObj
+    }, {})
 
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
-    };
+    }
     if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
+      params.sorter = `${sorter.field}_${sorter.order}`
     }
 
     dispatch({
       type: 'account/fetch',
       payload: params,
-    });
+    })
   }
 
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
-    form.resetFields();
+    const { form, dispatch } = this.props
+    form.resetFields()
     dispatch({
       type: 'account/fetch',
       payload: {},
-    });
+    })
   }
 
   toggleForm = () => {
     this.setState({
       expandForm: !this.state.expandForm,
-    });
+    })
   }
 
-  handleMenuClick = (e) => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
+  handleMenuClick = e => {
+    const { dispatch } = this.props
+    const { selectedRows } = this.state
 
-    if (!selectedRows) return;
+    if (!selectedRows) return
 
     switch (e.key) {
       case 'remove':
@@ -112,73 +119,67 @@ export default class TableList extends PureComponent {
           callback: () => {
             this.setState({
               selectedRows: [],
-            });
+            })
           },
-        });
-        break;
+        })
+        break
       default:
-        break;
+        break
     }
   }
 
-  handleSelectRows = (rows) => {
+  handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
-    });
+    })
   }
 
-  handleSearch = (e) => {
-    e.preventDefault();
+  handleSearch = e => {
+    e.preventDefault()
 
-    const { dispatch, form } = this.props;
+    const { dispatch, form } = this.props
 
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
+      if (err) return
 
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
+      }
 
       this.setState({
         formValues: values,
-      });
+      })
 
       dispatch({
         type: 'account/fetch',
         payload: values,
-      });
-    });
+      })
+    })
   }
 
-  handleModalVisible = (flag) => {
+  handleModalVisible = flag => {
     this.setState({
       modalVisible: !!flag,
-    });
+    })
   }
 
-  handleAddInput = (e) => {
-    this.setState({
-      addInputValue: e.target.value,
-    });
-  }
-
-  handleAdd = () => {
+  handleAddManager = () => {
     this.props.dispatch({
       type: 'account/add',
       payload: {
         description: this.state.addInputValue,
       },
-    });
+    })
 
-    message.success('添加成功');
+    message.success('添加成功')
     this.setState({
       modalVisible: false,
-    });
+    })
   }
 
   renderSimpleForm() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -193,7 +194,7 @@ export default class TableList extends PureComponent {
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
                   <Option value="1">运行中</Option>
-                </Select>
+                </Select>,
               )}
             </FormItem>
           </Col>
@@ -212,11 +213,11 @@ export default class TableList extends PureComponent {
           </Col>
         </Row>
       </Form>
-    );
+    )
   }
 
   renderAdvancedForm() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -231,14 +232,14 @@ export default class TableList extends PureComponent {
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
                   <Option value="1">运行中</Option>
-                </Select>
+                </Select>,
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="调用次数">
               {getFieldDecorator('number')(
-                <InputNumber style={{ width: '100%' }} />
+                <InputNumber style={{ width: '100%' }} />,
               )}
             </FormItem>
           </Col>
@@ -250,7 +251,7 @@ export default class TableList extends PureComponent {
                 <DatePicker
                   style={{ width: '100%' }}
                   placeholder="请输入更新日期"
-                />
+                />,
               )}
             </FormItem>
           </Col>
@@ -260,7 +261,7 @@ export default class TableList extends PureComponent {
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
                   <Option value="1">运行中</Option>
-                </Select>
+                </Select>,
               )}
             </FormItem>
           </Col>
@@ -270,7 +271,7 @@ export default class TableList extends PureComponent {
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
                   <Option value="1">运行中</Option>
-                </Select>
+                </Select>,
               )}
             </FormItem>
           </Col>
@@ -289,27 +290,26 @@ export default class TableList extends PureComponent {
           </span>
         </div>
       </Form>
-    );
+    )
   }
 
   renderForm() {
     return this.state.expandForm
       ? this.renderAdvancedForm()
-      : this.renderSimpleForm();
+      : this.renderSimpleForm()
   }
 
-
   render() {
-    console.log('this.props', this.props);
-    const { account: { loading: accountLoading, data } } = this.props;
-    const { selectedRows, modalVisible, addInputValue } = this.state;
+    console.log('this.props', this.props)
+    const { account: { loading: accountLoading, data } } = this.props
+    const { selectedRows, modalVisible, addInputValue } = this.state
 
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
         <Menu.Item key="approval">批量审批</Menu.Item>
       </Menu>
-    );
+    )
 
     return (
       <PageHeaderLayout title="所有管理员">
@@ -347,7 +347,7 @@ export default class TableList extends PureComponent {
         <Modal
           title="新建管理员"
           visible={modalVisible}
-          onOk={this.handleAdd}
+          onOk={this.handleAddManager}
           onCancel={() => this.handleModalVisible()}
         >
           <FormItem
@@ -357,8 +357,8 @@ export default class TableList extends PureComponent {
           >
             <Input
               placeholder="请输入用户名"
-              onChange={this.handleAddInput}
-              value={addInputValue}
+              onChange={userName => this.setState({ userName })}
+              value={this.state.userName}
             />
           </FormItem>
           <FormItem
@@ -368,8 +368,19 @@ export default class TableList extends PureComponent {
           >
             <Input
               placeholder="请输入密码"
-              onChange={this.handleAddInput}
-              value={addInputValue}
+              onChange={password => this.setState({ password })}
+              value={this.state.passowrd}
+            />
+          </FormItem>
+          <FormItem
+            labelCol={{ span: 5 }}
+            wrapperCol={{ span: 15 }}
+            label="备注"
+          >
+            <Input
+              placeholder="请输入备注信息"
+              onChange={remarks => this.setState({ remarks })}
+              value={this.state.remarks}
             />
           </FormItem>
           <FormItem
@@ -377,13 +388,16 @@ export default class TableList extends PureComponent {
             wrapperCol={{ span: 15 }}
             label="管理员类型"
           >
-            <RadioGroup onChange={this.onChange} value={this.state.value}>
+            <RadioGroup
+              onChange={this.onRadioChange}
+              value={this.state.managerType}
+            >
               <Radio value={0}>普通管理员</Radio>
               <Radio value={1}>超级管理员</Radio>
             </RadioGroup>
           </FormItem>
         </Modal>
       </PageHeaderLayout>
-    );
+    )
   }
 }
